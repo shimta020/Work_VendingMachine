@@ -12,7 +12,7 @@ class Drink
     self.new('water', 100, 5)
   end
 end
-
+test
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
   
