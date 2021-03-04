@@ -22,15 +22,14 @@ class VendingMachine
     @drink = [{name: 'coke', price: 120, count: 5}]
   end
   
-  def slot_money
-    puts "お金を投入してください"
-    money = gets.to_i
+  def slot_money(money)
     if MONEY.include?(money)
       @slot_money += money
       puts "#{money}円投入されました"
     else
       MONEY.each { |money| print "#{money}円" }
-      puts "のいずれかを投入してください！\n#{money}円お返しします"
+      puts 'のいずれかを投入してください！'
+      puts "#{money}円お返しします"
     end
   end
   
@@ -50,25 +49,10 @@ class VendingMachine
     end
   end
 
-  def add_drink
-    drink = {}
-    puts "追加したい商品名は？"
-    str = gets.chomp
-    drink[:name] = str
-    puts "値段は？"
-    int1 = gets.chomp.to_i
-    drink[:price] = int1
-    puts "本数は？"
-    int2 = gets.chomp.to_i
-    drink[:count] = int2
-    @drink << drink
+  def add_drink(drink)
+    @drink << { name: drink.name, price: drink.price, count: drink.count }
     puts "#{@drink.last[:name]}(#{@drink.last[:price]}円)を#{@drink.last[:count]}本追加！"
   end
-  
-  # def add_drink(drink)
-  #   @drink << { name: drink.name, price: drink.price, count: drink.count }
-  #   puts "#{@drink.last[:name]}(#{@drink.last[:price]}円)を#{@drink.last[:count]}本追加！"
-  # end
   # 外から追加したい場合は以下の方法で行う.
   # def add_drink(new_drink)
   #   @drink << new_drink
@@ -92,7 +76,7 @@ class VendingMachine
     puts "現在の売り上げは#{@sales}円です"
   end
   
-  # 当たり機能
+  # 当たり機能は追加機能なので外しても良いです
   def win_or_lose
     num1, num2 = [rand(0...5),rand(0...5)]
     puts "当たるかな？"
@@ -149,68 +133,11 @@ class VendingMachine
       end
     end
   end
-  # 管理者かお客さんかでシステムを分ける
-  # customerは購入した商品を確認できるようにする？
-  def customer
-    while true do
-      puts "いらっしゃいませ。\n何をご希望ですか？"
-      puts "0：終了 1：商品確認 2：お金の投入 3：投入金額確認 4：商品購入"
-      n = gets.to_i
-      if n == 0
-        puts 'さようなら〜'
-        return_money
-        break
-      elsif n == 1
-        check_stock
-      elsif n == 2
-        slot_money
-      elsif n == 3
-        sum_money
-      elsif n == 4
-        purchase
-      end
-    end
-  end
-
-  def admin
-    while true do
-      puts "何をご希望ですか？"
-      puts "0：終了 1：在庫確認 2：商品追加 3：在庫追加 4：売り上げ確認"
-      n = gets.to_i
-      if n == 0
-        puts 'さようなら〜'
-        break
-      elsif n == 1
-        check_stock
-      elsif n == 2
-        add_drink
-      elsif n == 3
-        add_drink_stock
-      elsif n == 4
-        how_much_sales
-      end
-    end
-  end
-
-  def customer_or_admin
-    while true do
-      puts "0：終了 1：お客様 2：管理人"
-      n = gets.to_i
-      if n == 0
-        puts "さようなら〜"
-        break
-      elsif n == 1
-        customer
-      elsif n == 2
-        admin
-      end
-    end
-  end
 end
 
 # require './vend2.rb'
 vm = VendingMachine.new
-vm.customer_or_admin
+
 # puts Drink.redbull
 # puts Drink.redbull.name
 # puts Drink.redbull.price
