@@ -12,7 +12,6 @@ class Drink
     self.new('water', 100, 5)
   end
 end
-test
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
   
@@ -71,13 +70,12 @@ class VendingMachine
     puts "#{@drink[n][:name]}の在庫数が#{@drink[n][:count]}になりました"
   end
 
-  
-  def how_much_sales
+  def check_sales
     puts "現在の売り上げは#{@sales}円です"
   end
   
   # 当たり機能は追加機能なので外しても良いです
-  def win_or_lose
+  def draw lots
     num1, num2 = [rand(0...5),rand(0...5)]
     puts "当たるかな？"
     3.times do
