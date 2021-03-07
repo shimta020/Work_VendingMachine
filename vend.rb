@@ -15,33 +15,36 @@ end
 
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
-  
+
   def initialize
     @sales = 0
     @slot_money = 0
     @drink = [{name: 'coke', price: 120, count: 5}]
   end
-  
+
   def slot_money(money)
     if MONEY.include?(money)
       @slot_money += money
       puts "#{money}円投入されました"
+      @slot_money
     else
       MONEY.each { |money| print "#{money}円" }
       puts 'のいずれかを投入してください！'
       puts "#{money}円お返しします"
+      money
     end
   end
-  
+
   def sum_money
     puts "現在の投入金額は#{@slot_money}円です"
+     @slot_money
   end
-  
+
   def return_money
     puts "#{@slot_money}円のお返しです"
     @slot_money = 0
   end
-  
+
   def check_stock
     puts '現在の商品はこちらです'
     @drink.each do |drink|
@@ -71,11 +74,11 @@ class VendingMachine
     puts "#{@drink[n][:name]}の在庫数が#{@drink[n][:count]}になりました"
   end
 
-  
+
   def how_much_sales
     puts "現在の売り上げは#{@sales}円です"
   end
-  
+
   # 当たり機能は追加機能なので外しても良いです
   def win_or_lose
     num1, num2 = [rand(0...5),rand(0...5)]
@@ -86,13 +89,13 @@ class VendingMachine
     end
     if num1 == num2
       puts "大当たり！\n好きな飲みもの１本無料サービス！どれにしますか？"
-      @drink.each_with_index do |drink,i| 
-        puts "#{i+1} → #{drink[:name]}" 
+      @drink.each_with_index do |drink,i|
+        puts "#{i+1} → #{drink[:name]}"
       end
       n = gets.to_i - 1
       if @drink[n][:count] < 1
         puts '残念！在庫切れです...'
-      elsif 
+      elsif
         puts "#{@drink[n][:name]}をゲット！やったね！！！！！！！"
         @drink[n][:count] -= 1
       end
@@ -100,13 +103,13 @@ class VendingMachine
       puts "残念ハズレです..."
     end
   end
-  
+
   def purchase
     purchase_count = 0
     while true do
     puts "購入したい飲み物の番号を選択してください\n買い物を終了したい場合は0を押してください"
-    @drink.each_with_index do |drink, i| 
-      puts "#{i+1} → #{drink[:name]}：#{drink[:price]}円" 
+    @drink.each_with_index do |drink, i|
+      puts "#{i+1} → #{drink[:name]}：#{drink[:price]}円"
     end
     n = gets.to_i - 1
       if n == -1
@@ -129,7 +132,7 @@ class VendingMachine
           @slot_money -= @drink[n][:price]
           @sales += @drink[n][:price]
           purchase_count += 1
-        end
+          end
       end
     end
   end
