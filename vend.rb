@@ -15,7 +15,7 @@ end
 
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
-attr_reader :sales
+attr_reader :sales, :drink
 attr_accessor :n
   def initialize
     @n = 0
@@ -79,6 +79,7 @@ attr_accessor :n
 
   def how_much_sales
     puts "現在の売り上げは#{@sales}円です"
+    "現在の売り上げは#{@sales}円です"
   end
 
   # 当たり機能は追加機能なので外しても良いです
@@ -120,15 +121,17 @@ attr_accessor :n
     else
       if @slot_money < @drink[@n][:price]
       puts '料金不足です'
-    elsif @drink[@n][:stock] < 1
+      return '料金不足です'
+
+    elsif @drink[@n][:count] < 1
         puts '残念！在庫切れです...'
+        return '残念！在庫切れです...'
       elsif @slot_money >= @drink[@n][:price]
         puts '#{@drink[@n][:name]}をゲット！やったね！！！！！！！'
-        @drink[@n][:stock] -= 1
+        @drink[@n][:count] -= 1
         @slot_money -= @drink[@n][:price]
         @sales += @drink[@n][:price]
         return_money
-
       end
     end
   end
