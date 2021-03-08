@@ -15,8 +15,10 @@ end
 
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
-
+attr_reader :sales
+attr_accessor :n
   def initialize
+    @n = 0
     @sales = 0
     @slot_money = 0
     @drink = [{name: 'coke', price: 120, count: 5}]
@@ -37,7 +39,7 @@ class VendingMachine
 
   def sum_money
     puts "現在の投入金額は#{@slot_money}円です"
-     @slot_money
+    @slot_money
   end
 
   def return_money
@@ -104,35 +106,29 @@ class VendingMachine
     end
   end
 
+
   def purchase
-    purchase_count = 0
-    while true do
-    puts "購入したい飲み物の番号を選択してください\n買い物を終了したい場合は0を押してください"
-    @drink.each_with_index do |drink, i|
-      puts "#{i+1} → #{drink[:name]}：#{drink[:price]}円"
+    puts '購入したい飲み物の番号を選択してください'
+    @drink.each_with_index do |drink,i|
+      puts '#{i+1} → #{drink[:name]}：#{drink[:price]}円'
     end
-    n = gets.to_i - 1
-      if n == -1
+    # @n = gets.to_i - 1
+    if @n == -1
         puts 'ありがとうございました〜'
-        if purchase_count >= 1
-          win_or_lose
-        end
+        return 'ありがとうございました〜'
         return_money
-        break
-      else
-        if @slot_money < @drink[n][:price]
-          puts '料金不足です'
-          break
-        elsif @drink[n][:count] < 1
-          puts '残念！在庫切れです...'
-          break
-        elsif @slot_money >= @drink[n][:price]
-          puts "#{@drink[n][:name]}をゲット！やったね！！！！！！！"
-          @drink[n][:count] -= 1
-          @slot_money -= @drink[n][:price]
-          @sales += @drink[n][:price]
-          purchase_count += 1
-          end
+    else
+      if @slot_money < @drink[@n][:price]
+      puts '料金不足です'
+    elsif @drink[@n][:stock] < 1
+        puts '残念！在庫切れです...'
+      elsif @slot_money >= @drink[@n][:price]
+        puts '#{@drink[@n][:name]}をゲット！やったね！！！！！！！'
+        @drink[@n][:stock] -= 1
+        @slot_money -= @drink[@n][:price]
+        @sales += @drink[@n][:price]
+        return_money
+
       end
     end
   end

@@ -56,12 +56,27 @@ describe 'VendingMachine' do
          expect(drink[1][:count]).to eq 5
       end
     end
-      # context 'purchase' do
-      #   it 'cokeを1本購入した場合' do
-      #    @vm.slot_money(1000)
-      #    n = 1
-      #    @vm.purchase
-      #     binding.irb
+      context 'purchase' do
+      before do
+        @vm = VendingMachine.new
+      end
+        it '何も購入しない場合' do
+          @vm.slot_money(1000)
+          @vm.n = -1
+         vm_1 = @vm.purchase
+         binding.irb
+         expect(vm_1).to eq 'ありがとうございました〜'
+          # binding.irb
+        end
+        it 'cokeを1本購入した場合' do
+          @vm.slot_money(1000)
+          @vm.n = 0
+         vm_2 = @vm.purchase
+         # binding.irb
+         expect(vm_2.sales).to eq 120
+
+        end
+      end
       #
       #    vm_b = @vm.purchase
       #    # binding.irb
