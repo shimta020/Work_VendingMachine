@@ -54,9 +54,6 @@ describe 'VendingMachine' do
       end
     end
       context '購入操作' do
-      before do
-        @vm = VendingMachine.new
-      end
         it '何も購入しない' do
           @vm.slot_money(1000)
           @vm.n = -1
@@ -80,8 +77,25 @@ describe 'VendingMachine' do
           @vm.purchase
           # binding.irb
           expect(@vm.drink[0][:count]).to eq 4
-          expect(@vm.how_much_sales).to eq '現在の売り上げは120円です'
+          expect(@vm.check_sales).to eq '現在の売り上げは120円です'
           expect(@vm.return_money).to eq 0
+        end
+      end
+      context 'ドリンクを購入した場合(スロット機能発動)' do
+        it '大当たり(１本無料サービス)' do
+          @vm.num1 = 1
+          @vm.num2 = 1
+          @vm.draw_lots
+          @vm.n = 0
+          vm_4 = @vm.check_stock
+          expect(@vm.drink[0][:count]).to eq 4
+        end
+        it 'ハズレ' do
+          @vm.slot_money(1000)
+          @vm.num1 = 1
+          @vm.num2 = 2
+          expect(@vm.draw_lots).to eq '残念ハズレです...'
+          expect(@vm.drink[0][:count]).to eq 5
         end
       end
     end

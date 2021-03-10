@@ -15,8 +15,8 @@ end
 
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
-attr_reader :sales, :drink
-attr_accessor :n
+  attr_reader :sales, :drink
+  attr_accessor :n, :num1, :num2
   def initialize
     @n = 0
     @sales = 0
@@ -77,14 +77,14 @@ attr_accessor :n
   end
 
 
-  def how_much_sales
+  def check_sales
     puts "現在の売り上げは#{@sales}円です"
     "現在の売り上げは#{@sales}円です"
   end
 
   # 当たり機能は追加機能なので外しても良いです
-  def win_or_lose
-    num1, num2 = [rand(0...5),rand(0...5)]
+  def draw_lots
+    # num1, num2 = [rand(0...5),rand(0...5)]
     puts "当たるかな？"
     3.times do
       puts'.'
@@ -94,16 +94,18 @@ attr_accessor :n
       puts "大当たり！\n好きな飲みもの１本無料サービス！どれにしますか？"
       @drink.each_with_index do |drink,i|
         puts "#{i+1} → #{drink[:name]}"
+        # return "大当たり！"
       end
-      n = gets.to_i - 1
-      if @drink[n][:count] < 1
+      # @n = gets.to_i - 1
+      if @drink[@n][:count] < 1
         puts '残念！在庫切れです...'
       elsif
-        puts "#{@drink[n][:name]}をゲット！やったね！！！！！！！"
-        @drink[n][:count] -= 1
+        @drink[@n][:count] -= 1
+        puts '#{@drink[@n][:name]}をゲット！やったね！！！！！！！'
       end
     else
       puts "残念ハズレです..."
+      return "残念ハズレです..."
     end
   end
 
@@ -179,7 +181,7 @@ vm = VendingMachine.new
 # 投入金額が足りない場合もしくは在庫がない場合、購入操作を行っても何もしない。
 # vm.purchase
 # 現在の売上金額を取得できる。
-# vm.how_much_sales
+# vm.check_sales
 # 払い戻し操作では現在の投入金額からジュース購入金額を引いた釣り銭を出力する。
 
 # ステップ４ 機能拡張
@@ -194,7 +196,7 @@ vm = VendingMachine.new
 # vm.check_stock
 
 # vm.purchase
-# vm.how_much_sales
+# vm.check_sales
 
 # ステップ５ 釣り銭と売り上げ管理
 # ジュース値段以上の投入金額が投入されている条件下で購入操作を行うと、釣り銭（投入金額とジュース値段の差分）を出力する。
