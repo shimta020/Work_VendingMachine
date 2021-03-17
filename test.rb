@@ -16,7 +16,10 @@ end
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
   attr_reader :sales, :drink
+  # テスト用に追加
+  attr_accessor :n, :num1, :num2
   def initialize
+    @n = 0
     @sales = 0
     @slot_money = 0
     @drink = [{name: 'coke', price: 120, count: 5}]
@@ -26,10 +29,12 @@ class VendingMachine
     if MONEY.include?(money)
       @slot_money += money
       puts "#{money}円投入されました"
+      @slot_money
     else
       MONEY.each { |money| print "#{money}円" }
       puts 'のいずれかを投入してください！'
       puts "#{money}円お返しします"
+      money
     end
   end
 
@@ -80,7 +85,7 @@ class VendingMachine
 
   # 当たり機能は追加機能なので外しても良いです
   def draw_lots
-    num1, num2 = [rand(0...3),rand(0...3)]
+    # num1, num2 = [rand(0...3),rand(0...3)]
     puts "当たるかな？"
     3.times do
       puts'.'
@@ -90,13 +95,14 @@ class VendingMachine
       puts "大当たり！\n好きな飲みもの１本無料サービス！どれにしますか？"
       @drink.each_with_index do |drink,i|
         puts "#{i+1} → #{drink[:name]}"
+        # return "大当たり！"
       end
-      @n = gets.to_i - 1
-      if @drink[n][:count] < 1
+      # @n = gets.to_i - 1
+      if @drink[@n][:count] < 1
         puts '残念！在庫切れです...'
       elsif
-        @drink[n][:count] -= 1
-        puts "#{@drink[n][:name]}をゲット！やったね！！！！！！！"
+        @drink[@n][:count] -= 1
+        puts "#{@drink[@n][:name]}をゲット！やったね！！！！！！！"
       end
     else
       puts "残念ハズレです..."
@@ -106,34 +112,29 @@ class VendingMachine
 
 
   def purchase
-    purchase_count = 0
-    while true do
-    puts "購入したい飲み物の番号を選択してください\n買い物を終了したい場合は0を押してください"
-    @drink.each_with_index do |drink, i| 
-      puts "#{i+1} → #{drink[:name]}：#{drink[:price]}円" 
+    puts '購入したい飲み物の番号を選択してください'
+    @drink.each_with_index do |drink,i|
+      puts "#{i+1} → #{drink[:name]}：#{drink[:price]}円"
     end
-    n = gets.to_i - 1
-      if n == -1
+    # @n = gets.to_i - 1
+    if @n == -1
         puts 'ありがとうございました〜'
-        if purchase_count >= 1
-          draw_lots
-        end
+        return 'ありがとうございました〜'
         return_money
-        break
-      else
-        if @slot_money < @drink[n][:price]
-          puts '料金不足です'
-          break
-        elsif @drink[n][:count] < 1
-          puts '残念！在庫切れです...'
-          break
-        elsif @slot_money >= @drink[n][:price]
-          puts "#{@drink[n][:name]}をゲット！やったね！！！！！！！"
-          @drink[n][:count] -= 1
-          @slot_money -= @drink[n][:price]
-          @sales += @drink[n][:price]
-          purchase_count += 1
-        end
+    else
+      if @slot_money < @drink[@n][:price]
+      puts '料金不足です'
+      return '料金不足です'
+
+    elsif @drink[@n][:count] < 1
+        puts '残念！在庫切れです...'
+        return '残念！在庫切れです...'
+      elsif @slot_money >= @drink[@n][:price]
+        puts "#{@drink[@n][:name]}をゲット！やったね！！！！！！！"
+        @drink[@n][:count] -= 1
+        @slot_money -= @drink[@n][:price]
+        @sales += @drink[@n][:price]
+        return_money
       end
     end
   end

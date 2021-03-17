@@ -1,7 +1,9 @@
+# メソッドの速度を測定するために作成したファイルです
 require 'benchmark'
+# 実行は→ruby benchmark.rb
 
 Benchmark.bm 7 do |r|
-  array = 100_000.times.map{ rand(0..3) }
+  array = 1_000_000.times.map{ rand(0..3) }
   # array = [1,2,1,3,0,2,0,1,3,2,1,0,0,2,1,3,.........]みたいな感じで0~3のランダムな数字が10万個入ってる
   sum = 0
   r.report "if" do
@@ -34,7 +36,7 @@ Benchmark.bm 7 do |r|
 end
 
 Benchmark.bm 7 do |r|
-  array = 100_000.times.map{ rand }
+  array = 1_000_000.times.map{ rand }
   r.report "each" do
     sum = 0
     array.each { |n| sum+=n }
@@ -48,13 +50,13 @@ Benchmark.bm 7 do |r|
   array = []
   n = 0
   r.report "push" do
-    while n < 100_000 do
+    while n < 1_000_000 do
       array.push(n)
       n += 1
     end
   end
   r.report "<<" do
-    while  n < 100_000 do
+    while  n < 1_000_000 do
       array << n
       n += 1
     end
