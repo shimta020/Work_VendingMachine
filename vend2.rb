@@ -1,3 +1,4 @@
+# ボツコード
 class Drink
   attr_reader :name, :price, :count
   def initialize(name, price, count)
@@ -94,7 +95,7 @@ class VendingMachine
   
   # 当たり機能
   def win_or_lose
-    num1, num2 = [rand(0...5),rand(0...5)]
+    num1, num2 = [rand(0...3),rand(0...3)]
     puts "当たるかな？"
     3.times do
       puts'.'
