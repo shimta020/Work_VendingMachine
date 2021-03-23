@@ -113,11 +113,11 @@ class VendingMachine
     end
     n = gets.to_i - 1
       if n == -1
-        puts 'ありがとうございました〜'
         if purchase_count >= 1
           draw_lots
         end
         return_money
+        puts 'ありがとうございました〜'
         break
       else
         if @drink[n].nil?
@@ -128,6 +128,7 @@ class VendingMachine
             draw_lots
           end
           return_money
+          puts 'ありがとうございました〜'
           break
         elsif @drink[n][:count] < 1
           puts '残念！在庫切れです...'
@@ -145,7 +146,7 @@ class VendingMachine
 end
 
 # require './vend2.rb'
-vm = VendingMachine.new
+# vm = VendingMachine.new
 
 # ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 # ステップ0 お金の投入と払い戻し
@@ -196,4 +197,3 @@ vm = VendingMachine.new
 # ジュース値段以上の投入金額が投入されている条件下で購入操作を行うと、釣り銭（投入金額とジュース値段の差分）を出力する。
 # ジュースと投入金額が同じ場合、つまり、釣り銭0円の場合も、釣り銭0円と出力する。
 # 釣り銭の硬貨の種類は考慮しなくてよい。
-
