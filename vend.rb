@@ -15,7 +15,6 @@ end
 
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
-  attr_reader :sales, :drink
   def initialize
     @sales = 0
     @slot_money = 0
@@ -91,7 +90,7 @@ class VendingMachine
       @drink.each_with_index do |drink,i|
         puts "#{i+1} → #{drink[:name]}"
       end
-      @n = gets.to_i - 1
+      n = gets.to_i - 1
       if @drink[n][:count] < 1
         puts '残念！在庫切れです...'
       elsif
@@ -121,8 +120,14 @@ class VendingMachine
         return_money
         break
       else
-        if @slot_money < @drink[n][:price]
+        if @drink[n].nil?
+          puts '選択した番号の商品はございません。もう一度商品を選択してください'
+        elsif @slot_money < @drink[n][:price]
           puts '料金不足です'
+          if purchase_count >= 1
+            draw_lots
+          end
+          return_money
           break
         elsif @drink[n][:count] < 1
           puts '残念！在庫切れです...'
@@ -140,17 +145,17 @@ class VendingMachine
 end
 
 # require './vend2.rb'
-# vm = VendingMachine.new
+vm = VendingMachine.new
 
 # ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 # ステップ0 お金の投入と払い戻し
 # 10円玉、50円玉、100円玉、500円玉、1000円札を１つずつ投入できる。
 # 投入は複数回できる。
-# vm.slot_money(11) → 返却される
-# vm.slot_money(500)
-# vm.slot_money(500)
+vm.slot_money(11)
+vm.slot_money(500)
+vm.slot_money(500)
 # 投入金額の総計を取得できる。
-# vm.sum_money
+vm.sum_money
 # 払い戻し操作を行うと、投入金額の総計を釣り銭として出力する。
 # vm.return_money
 
@@ -161,7 +166,7 @@ end
 # ステップ２ ジュースの管理
 # 値段と名前の属性からなるジュースを１種類格納できる。初期状態で、コーラ（値段:120円、名前”コーラ”）を5本格納している。
 # 格納されているジュースの情報（値段と名前と在庫）を取得できる。
-# vm.check_stock
+vm.check_stock
 
 # ステップ３ 購入
 # 投入金額、在庫の点で、コーラが購入できるかどうかを取得できる。
@@ -176,18 +181,23 @@ end
 # ステップ４ 機能拡張
 # ジュースを3種類管理できるようにする。
 # 在庫にレッドブル（値段:200円、名前”レッドブル”）5本を追加する。
-# vm.add_drink(Drink.redbull)
+ vm.add_drink(Drink.redbull)
 # vm.add_drink({name: 'redbull', price: 200, stock: 5})
 # # 在庫に水（値段:100円、名前”水”）5本を追加する。
-# vm.add_drink(Drink.water)
+ vm.add_drink(Drink.water)
 # vm.add_drink({name: 'water', price: 100, stock: 5})
 # # 投入金額、在庫の点で購入可能なドリンクのリストを取得できる。
-# vm.check_stock
+ vm.check_stock
 
-# vm.purchase
-# vm.check_sales
+ vm.purchase
+ vm.check_sales
 
 # ステップ５ 釣り銭と売り上げ管理
 # ジュース値段以上の投入金額が投入されている条件下で購入操作を行うと、釣り銭（投入金額とジュース値段の差分）を出力する。
 # ジュースと投入金額が同じ場合、つまり、釣り銭0円の場合も、釣り銭0円と出力する。
 # 釣り銭の硬貨の種類は考慮しなくてよい。
+
+# 訂正箇所  1.商品選択する時、指定された商品番号と0以外を選ぶとエラーになる問題を修正
+#          2.クジ機能のnに＠がついていてインスタンス化されていて、エラーが出たので訂正(93行目)
+#          3.購入フェイズで料金不足処理の分岐で既に商品を購入されている方のための処理が不足している。クジ機能とお金の返却機能を追加（ネストが３層目に到達していて、読みやすいコードとは言えない）（127行目）
+#          4.puts 'ありがとうございました〜'の処理の順番（お金返した後では？）
