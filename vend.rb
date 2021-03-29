@@ -14,13 +14,13 @@ class Drink
 end
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
-  
+  attr_reader :sales, :drink
   def initialize
     @sales = 0
     @slot_money = 0
     @drink = [{name: 'coke', price: 120, count: 5}]
   end
-  
+
   def slot_money(money)
     if MONEY.include?(money)
       @slot_money += money
@@ -31,16 +31,17 @@ class VendingMachine
       puts "#{money}円お返しします"
     end
   end
-  
+
   def sum_money
     puts "現在の投入金額は#{@slot_money}円です"
+    @slot_money
   end
-  
+
   def return_money
     puts "#{@slot_money}円のお返しです"
     @slot_money = 0
   end
-  
+
   def check_stock
     puts '現在の商品はこちらです'
     @drink.each do |drink|
@@ -72,11 +73,12 @@ class VendingMachine
 
   def check_sales
     puts "現在の売り上げは#{@sales}円です"
+    "現在の売り上げは#{@sales}円です"
   end
-  
+
   # 当たり機能は追加機能なので外しても良いです
-  def draw lots
-    num1, num2 = [rand(0...5),rand(0...5)]
+  def draw_lots
+    num1, num2 = [rand(0...3),rand(0...3)]
     puts "当たるかな？"
     3.times do
       puts'.'
@@ -84,21 +86,23 @@ class VendingMachine
     end
     if num1 == num2
       puts "大当たり！\n好きな飲みもの１本無料サービス！どれにしますか？"
-      @drink.each_with_index do |drink,i| 
-        puts "#{i+1} → #{drink[:name]}" 
+      @drink.each_with_index do |drink,i|
+        puts "#{i+1} → #{drink[:name]}"
       end
-      n = gets.to_i - 1
+      @n = gets.to_i - 1
       if @drink[n][:count] < 1
         puts '残念！在庫切れです...'
-      elsif 
-        puts "#{@drink[n][:name]}をゲット！やったね！！！！！！！"
+      elsif
         @drink[n][:count] -= 1
+        puts "#{@drink[n][:name]}をゲット！やったね！！！！！！！"
       end
     else
       puts "残念ハズレです..."
+      return "残念ハズレです..."
     end
   end
-  
+
+
   def purchase
     purchase_count = 0
     while true do
@@ -110,7 +114,7 @@ class VendingMachine
       if n == -1
         puts 'ありがとうございました〜'
         if purchase_count >= 1
-          win_or_lose
+          draw_lots
         end
         return_money
         break
@@ -134,18 +138,7 @@ class VendingMachine
 end
 
 # require './vend2.rb'
-vm = VendingMachine.new
-
-# puts Drink.redbull
-# puts Drink.redbull.name
-# puts Drink.redbull.price
-# puts Drink.redbull.count
-
 # vm = VendingMachine.new
-
-# vm.slot_money(500)
-
-# vm.check_stock
 
 # ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 # ステップ0 お金の投入と払い戻し
@@ -175,7 +168,7 @@ vm = VendingMachine.new
 # 投入金額が足りない場合もしくは在庫がない場合、購入操作を行っても何もしない。
 # vm.purchase
 # 現在の売上金額を取得できる。
-# vm.how_much_sales
+# vm.check_sales
 # 払い戻し操作では現在の投入金額からジュース購入金額を引いた釣り銭を出力する。
 
 # ステップ４ 機能拡張
@@ -190,7 +183,7 @@ vm = VendingMachine.new
 # vm.check_stock
 
 # vm.purchase
-# vm.how_much_sales
+# vm.check_sales
 
 # ステップ５ 釣り銭と売り上げ管理
 # ジュース値段以上の投入金額が投入されている条件下で購入操作を行うと、釣り銭（投入金額とジュース値段の差分）を出力する。
