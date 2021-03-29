@@ -145,7 +145,7 @@ class VendingMachine
   end
 end
 
-# require './vend2.rb'
+# require './vend.rb'
 # vm = VendingMachine.new
 
 # ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
