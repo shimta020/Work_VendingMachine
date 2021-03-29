@@ -15,7 +15,6 @@ end
 
 class VendingMachine
   MONEY = [10, 50, 100, 500, 1000].freeze
-  attr_reader :sales, :drink
   def initialize
     @sales = 0
     @slot_money = 0
@@ -91,7 +90,7 @@ class VendingMachine
       @drink.each_with_index do |drink,i|
         puts "#{i+1} → #{drink[:name]}"
       end
-      @n = gets.to_i - 1
+      n = gets.to_i - 1
       if @drink[n][:count] < 1
         puts '残念！在庫切れです...'
       elsif
@@ -114,15 +113,22 @@ class VendingMachine
     end
     n = gets.to_i - 1
       if n == -1
-        puts 'ありがとうございました〜'
         if purchase_count >= 1
           draw_lots
         end
         return_money
+        puts 'ありがとうございました〜'
         break
       else
-        if @slot_money < @drink[n][:price]
+        if @drink[n].nil?
+          puts '選択した番号の商品はございません。もう一度商品を選択してください'
+        elsif @slot_money < @drink[n][:price]
           puts '料金不足です'
+          if purchase_count >= 1
+            draw_lots
+          end
+          return_money
+          puts 'ありがとうございました〜'
           break
         elsif @drink[n][:count] < 1
           puts '残念！在庫切れです...'
@@ -139,14 +145,14 @@ class VendingMachine
   end
 end
 
-# require './vend2.rb'
+# require './vend.rb'
 # vm = VendingMachine.new
 
 # ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 # ステップ0 お金の投入と払い戻し
 # 10円玉、50円玉、100円玉、500円玉、1000円札を１つずつ投入できる。
 # 投入は複数回できる。
-# vm.slot_money(11) → 返却される
+# vm.slot_money(11)
 # vm.slot_money(500)
 # vm.slot_money(500)
 # 投入金額の総計を取得できる。

@@ -122,11 +122,15 @@ class VendingMachine
         return 'ありがとうございました〜'
         return_money
     else
-      if @slot_money < @drink[@n][:price]
-      puts '料金不足です'
-      return '料金不足です'
-
-    elsif @drink[@n][:count] < 1
+      if @drink[n].nil?
+        puts '選択した番号の商品はございません。もう一度商品を選択してください'
+        return '選択した番号の商品はございません。もう一度商品を選択してください'
+      elsif @slot_money < @drink[@n][:price]
+        puts '料金不足です'
+        return '料金不足です'
+        return_money
+        puts 'ありがとうございました〜'
+      elsif @drink[@n][:count] < 1
         puts '残念！在庫切れです...'
         return '残念！在庫切れです...'
       elsif @slot_money >= @drink[@n][:price]
