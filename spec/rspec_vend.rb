@@ -80,6 +80,13 @@ describe 'VendingMachine' do
       expect(@vm.check_sales).to eq '現在の売り上げは120円です'
       expect(@vm.return_money).to eq 0
     end
+    it '存在しない番号を選ぶ' do
+      @vm.slot_money(1000)
+      @vm.n = 100
+      @vm.purchase
+      # binding.irb
+      expect(@vm.purchase).to eq '選択した番号の商品はございません。もう一度商品を選択してください'
+    end
   end
   context 'ドリンクを購入した場合(スロット機能発動)' do
     it '大当たり(１本無料サービス)' do
